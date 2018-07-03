@@ -38,6 +38,35 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
+
+        <!-- zooKeeper 的集成，使用Curator begin-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>4.0.1</version>
+            <exclusions>
+                <!-- curator 最新版本支持zk3.5beta，这里我们只用·3.4.11，需要排除内置的3.5  -->
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.11</version>
+        </dependency>
+
+        <!-- zooKeeper 的集成，使用Curator end-->
+
     </dependencies>
 
     <packaging>jar</packaging>
