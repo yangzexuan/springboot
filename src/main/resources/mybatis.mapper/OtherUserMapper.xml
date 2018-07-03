@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 通过nameSpace 找到对应的mapper类 -->
+<!-- 指定映射器的命名空间 -->
+<mapper namespace="com.dome.springboot.mybatis.mapper.OtherUserMapper">
+
+
+    <!-- 映射 SQL 语句 -->
+    <select id="selectUser"   resultType="java.util.Map" >
+
+		select * from users where cuserid  = #{id}
+	</select>
+
+    <insert id="userinsert" parameterType="userVO"  keyProperty="pk" useGeneratedKeys="true">
+
+        insert into users (pk,username,usercode,cuserid)         value ( #{pk}, #{username},#{usercode},#{cuserid} )
+
+    </insert>
+
+
+    <!-- 批量新增的时候，注意接收的对象是一个列表，需要在动态拼接sql的时候遍历参数集合对象 -->
+    <insert id="insertBatchRole" parameterType="java.util.List"   keyProperty="id" useGeneratedKeys="true" >
+        Insert into myroles (id,rolename,userid) values
+        <!-- 注意foreach的语法,集合直接写list字符串，用item表示当前遍历的对象，结果集合通过使用逗号分隔使用separator属性 -->
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id},#{item.rolename},#{item.userid})
+        </foreach>
+    </insert>
+
+    <!-- 批量新增的时候，注意接收的对象是一个列表，需要在动态拼接sql的时候遍历参数集合对象 -->
+    <insert id="insertRole" parameterType="userVO"  keyProperty="id" useGeneratedKeys="true">
+        Insert into myroles (id,rolename,userid) values
+
+            (#{id},#{rolename},#{userid})
+
+    </insert>
+
+
+    <!-- 映射 SQL 语句 -->
+    <select id="selectUserAndRole"   resultMap="s" >
+
+		select users.pk,users.username,users.usercode,users.cuserid, myroles.id,myroles.rolename,myroles.userid from users
+		left join myroles on users.pk = myroles.userid
+
+		where pk  = #{id}
+	</select>
+
+
+    <resultMap id="s" type="userVO">
+        <id property="pk" column="pk" />
+        <result property="username" column="username"></result>
+        <result property="usercode" column="usercode"></result>
+        <result property="cuserid" column="cuserid"></result>
+        <collection property="roles" ofType="roleVO">
+            <id property="id" column="id"></id>
+            <result property="rolename" column="rolename"></result>
+
+            <result property="userid" column="userid"></result>
+        </collection>
+
+
+    </resultMap>
+
+
+</mapper>
